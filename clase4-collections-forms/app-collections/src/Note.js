@@ -8,7 +8,7 @@ export const Note = ({ descriptions = [], content, date }) => {
         <time>{date}</time>
       </small>
       {descriptions.map((description) => {
-        return <p><small key={description}>{description}</small></p>;
+        return <p key={description}><small>{description}</small></p>;
       })}
     </li>
   );

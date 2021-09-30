@@ -1,29 +1,25 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { Note } from "./Note";
-
-import axios from "axios";
+import { getAllNotes } from "./services/notes/getAllNotes";
+import { createNote } from "./services/notes/createNote";
 
 // EL ARRAY INICIAL DE NOTES LO DEFINIMOS EN EL INDEX.JS
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNotes] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     console.log("use effect");
-    setLoading(true)
+    setLoading(true);
     setTimeout(() => {
       console.log("ahora con axios");
-      axios
-      .get("https://jsonplaceholder.typicode.com/posts")
-        .then((response) => {
-          console.log(response)
-          const { data } = response;
-          setNotes(data)
-          setLoading(false)
-        });
+      getAllNotes().then((notes) => {
+        setNotes(notes);
+        setLoading(false);
+      });
     }, 2000);
   }, []); // En el array se le indican las dependencias [] = sin dependencias sólo una vez se ejecuta
   /*
@@ -42,20 +38,25 @@ function App() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const newNoteToAddState = {
-      id: notes.length + 1,
       title: newNote,
       body: newNote,
+      userId: 1,
     };
-    setNotes([...notes, newNoteToAddState]);
-    setNewNotes("");
+
+    createNote(newNoteToAddState)
+      .then((newNote) => {
+        setNotes((prevNotes) => prevNotes.concat(newNote));
+        setNewNotes("");
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
   console.log("render");
   return (
     <div>
       <h1>Notes</h1>
-      {
-        loading ? 'Cargando .....' : ''
-      }
+      {loading ? "Cargando ....." : ""}
       <ol>
         {notes.map((note) => (
           <Note key={note.id} {...note} />

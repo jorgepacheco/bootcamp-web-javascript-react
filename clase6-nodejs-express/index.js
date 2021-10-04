@@ -2,6 +2,8 @@
 // Importo la dependencia
 const express = require('express')
 const logger = require('./loggerMiddleware')
+const cors = require('cors')
+
 // Inicializo express
 const app = express()
 
@@ -9,6 +11,10 @@ const app = express()
 // 'Middleware' o interceptor
 app.use(express.json())
 
+// middleware CORS
+app.use(cors())
+
+// Nuestro middleware
 app.use(logger)
 let notes = [
   {
@@ -21,7 +27,7 @@ let notes = [
   {
     userId: 1,
     id: 2,
-    title: 'qui est esse',
+    title: 'qui est esse HOMMME',
     body: 'est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla'
   },
   {

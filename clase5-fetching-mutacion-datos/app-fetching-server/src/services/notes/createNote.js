@@ -1,5 +1,5 @@
 import axios from "axios";
-
+const baseUrl = 'http://localhost:3001/api/notes'
 export const createNote = ({title, body, userId}) => {
   const newNoteToAddState = {
     title: title,
@@ -8,7 +8,7 @@ export const createNote = ({title, body, userId}) => {
   };
 
   return axios
-    .post("https://jsonplaceholder.typicode.com/posts", newNoteToAddState)
+    .post(baseUrl, newNoteToAddState)
     .then((response) => {
       const { data } = response;
       console.log(data);

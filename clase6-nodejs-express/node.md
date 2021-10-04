@@ -92,3 +92,59 @@ Version Lens
 Express te da un modulo 'body-parser'
 
 app.use(express.json())
+
+## LINTER
+
+npm install eslint -D
+
+## Iniciar
+
+./node_modules/.bin/eslint --init
+
+genera el fichero .eslinttrc.js con las configuraciones seleccionadas.
+Las extensiones de ESLInt mira las convenckiones definidas y ES LENS te lo muestra en la misma linea.
+
+- si queremos usar un conjunto de reglaS PREDEFINIDAS podemos usar las 'standar'
+
+npm install standard -D
+
+- quitar el fichero .eslintrc.js y del package.json eliminar la dependencia de eslint
+
+## Middleware
+
+- Creamos un modulo loggerMiddleware e implementamos una la funcion
+
+```javascript
+const logger = (request, response, next) => {
+  console.log(request.body)
+  console.log(request.path)
+  console.log(request.path)
+  console.log('----***-----')
+  next()
+}
+module.exports = logger
+```
+
+- Importamos el modulo y lo 'usamos'
+
+const logger = require('./loggerMiddleware')
+app.use(logger)
+
+
+## CORS
+
+- api 3001
+
+- web 3000
+
+- Recursos compartidos en diferentes dominios
+
+-En backend decir qu eorigenes acceden a nuestro recursos
+
+- npm install cors -E --> dependencia de producción
+
+```javascript
+const cors = require('cors')
+
+app.use(cors())
+```

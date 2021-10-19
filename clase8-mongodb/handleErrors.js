@@ -1,0 +1,10 @@
+const errorManager = (error, request, response, next) => {
+  console.error(error.name)
+  if (error.name === 'CastError') {
+    response.status(400).send({ error: 'id used is malformed' })
+  } else {
+    response.status(503).end()
+  }
+}
+
+module.exports = { errorManager }

@@ -12,13 +12,17 @@ usersRouter.post('/', async (request, response) => {
 
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
-  const user = new User({
-    username,
-    name,
-    passwordHash
-  })
-  const savedUser = await user.save()
-  response.status(201).json(savedUser)
+  try {
+    const user = new User({
+      username,
+      name,
+      passwordHash
+    })
+    const savedUser = await user.save()
+    response.status(201).json(savedUser)
+  } catch (error) {
+    response.status(400).json({ error })
+  }
 })
 
 module.exports = usersRouter

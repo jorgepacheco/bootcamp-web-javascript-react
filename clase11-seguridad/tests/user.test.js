@@ -34,6 +34,21 @@ describe('creating a new user', () => {
     expect(usernames).toContain(newUser.username)
   })
 
+  test('creation fails with proper status code and message is already taken', async () => {
+    const usersAtStart = await getUsers()
+    const newUser = {
+      username: 'pacheroot',
+      name: 'ErMiguel',
+      password: 'tw1tch'
+    }
+
+    await api.post('/api/users').send(newUser)
+      .expect(400).expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await getUsers()
+
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
   afterAll(async () => {
     server.close()
     await moongose.connection.close()

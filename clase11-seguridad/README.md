@@ -13,3 +13,5 @@ npm install bcrypt
 - En Mongo se usan agregaciones, en mongose se usa popular a traves de las referencias
 
 User.find({}).populate('notes')
+
+## JAVASCRIPT WEB TOKENS

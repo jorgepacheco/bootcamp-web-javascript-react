@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const { model, Schema } = mongoose
+
+console.log('aaaaa')
 // Create schema
 const userSchema = new Schema({
   username: String,

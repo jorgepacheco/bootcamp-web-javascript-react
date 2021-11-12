@@ -15,6 +15,7 @@ const Note = require('./models/Note')
 const app = express()
 
 const usersRouter = require('./controllers/users')
+const User = require('./models/User.js')
 
 // Para usar el modulo de body-parser
 // 'Middleware' o interceptor
@@ -34,7 +35,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/notes', async (request, response, next) => {
-  const notes = await Note.find({})
+  const notes = await Note.find({}).populate('user')
   response.status(200).json(notes)
 })
 
@@ -73,20 +74,30 @@ app.put('/api/notes/:id', (request, response, next) => {
 })
 
 app.post('/api/notes', async (request, response, next) => {
-  const noteRequest = request.body
-  if (!noteRequest || !noteRequest.content) {
+  // const noteRequest = request.body
+  const {
+    content,
+    important = false,
+    userId
+  } = request.body
+
+  const user = await User.findById(userId)
+  if (!content) {
     return response.status(400).json({
       error: 'note.body is missing'
     })
   }
   const newNote = new Note({
-    content: noteRequest.content,
+    content: content,
     date: new Date(),
-    important: noteRequest.important || false
+    important: important || false,
+    user: user._id
   })
   try {
-    const result = await newNote.save()
-    response.status(201).json(result).end()
+    const savedNote = await newNote.save()
+    user.notes = user.notes.concat(savedNote._id)
+    user.save()
+    response.status(201).json(savedNote).end()
   } catch (error) {
     next(error)
   }

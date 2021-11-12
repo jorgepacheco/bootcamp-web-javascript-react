@@ -4,11 +4,9 @@ require('./mongo.js')
 // imports
 const express = require('express')
 const notFound = require('./middelware/notFound')
-const errors = require('./middelware/handleErrors')
+const handleErrors = require('./middelware/handleErrors')
 const trace = require('./middelware/loggerMiddleware')
 const cors = require('cors')
-
-// Importo el schema de Notes
 
 // Inicializo express
 const app = express()
@@ -43,7 +41,7 @@ app.use('/api/notes', notesRoutes)
 
 // Middleware para manejo de errores
 app.use(notFound)
-app.use(errors.errorManager)
+app.use(handleErrors)
 
 console.log(process.env.PORT)
 

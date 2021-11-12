@@ -1,7 +1,8 @@
 const notesRoutes = require('express').Router()
-
+const jwt = require('jsonwebtoken')
 const Note = require('../models/Note')
 const User = require('../models/User')
+const userExtractor = require('../middelware/userExtractor')
 
 notesRoutes.get('/', async (request, response, next) => {
   const notes = await Note.find({}).populate('user')
@@ -20,7 +21,7 @@ notesRoutes.get('/:id', (request, response, next) => {
   }).catch(err => { next(err) })
 })
 
-notesRoutes.delete('/:id', async (request, response, next) => {
+notesRoutes.delete('/:id', userExtractor, async (request, response, next) => {
   const { id } = request.params
   Note.findByIdAndRemove(id).then(result => {
     console.log('Borrado ....')
@@ -28,7 +29,7 @@ notesRoutes.delete('/:id', async (request, response, next) => {
   }).catch(err => { next(err) })
 })
 
-notesRoutes.put('/:id', (request, response, next) => {
+notesRoutes.put('/:id', userExtractor, (request, response, next) => {
   const { id } = request.params
   const noteRequest = request.body
   const newNoteInfo = {
@@ -42,31 +43,37 @@ notesRoutes.put('/:id', (request, response, next) => {
   }).catch(err => { next(err) })
 })
 
-notesRoutes.post('/', async (request, response, next) => {
-  // const noteRequest = request.body
+notesRoutes.post('/', userExtractor, async (request, response, next) => {
   const {
     content,
-    important = false,
-    userId
+    important = false
   } = request.body
 
+  // sacar userId de request
+  const { userId } = request
+
   const user = await User.findById(userId)
+
   if (!content) {
     return response.status(400).json({
-      error: 'note.body is missing'
+      error: 'required "content" field is missing'
     })
   }
+
   const newNote = new Note({
-    content: content,
+    content,
     date: new Date(),
-    important: important || false,
+    important,
     user: user._id
   })
+
   try {
     const savedNote = await newNote.save()
+
     user.notes = user.notes.concat(savedNote._id)
-    user.save()
-    response.status(201).json(savedNote).end()
+    await user.save()
+
+    response.json(savedNote)
   } catch (error) {
     next(error)
   }

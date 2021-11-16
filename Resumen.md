@@ -196,8 +196,20 @@ const App = () => {
 
 - fetch('url') devuelve una promesa
 
+## useState
+https://midu.dev/react-hooks-use-state-anadiendo-estado-a-nuestro-componente-funcional/
+
 ## useEffect
 
+El ciclo de vida de los componentes en React permitía en nuestros componentes con class poder ejecutar código en diferentes fases de montaje, actualización y desmontaje. De esta forma, podíamos añadir cierta funcionalidad en las distintas etapas de nuestro componente.
+
+Con los hooks también podremos acceder a esa ciclo de vida en nuestros componentes funcionales aunque de una forma más clara y sencilla. Para ello usaremos useEffect, un hook que recibe como parámetro una función que se ejecutará cada vez que nuestro componente se renderice, ya sea por un cambio de estado, por recibir props nuevas o, y esto es importante, porque es la primera vez que se monta.
+
+- Ahora que podemos evitar que el efecto se ejecute… también podríamos pasarle un array vacío como parámetro. ¿Y qué pasaría? Esto le diría a React que nuestro efecto no depende de ningún valor y que, por lo tanto, sólo debería ejecutarse al montarse y desmontarse nuestro componente.
+
+- El segundo parámetro del hook useEffect que hemos explicado antes. Esto sería la lista de parámetros de los que depende el efecto y, lo que indica, es que cuando estos parámetros no cambien entonces no volverá a renderizar el efecto. En este caso, este efecto sólo lo querremos renderizar cuando el nombre del Pokémon que queremos buscar cambie por props.
+
+https://midu.dev/react-hooks-use-effect-funcionalidad-en-el-ciclo-vida-componentes/
 - Es otro hook que nos dice cuando se renderiza el componente
 
 ```javascript
